@@ -7,7 +7,6 @@ const screen1 = document.querySelector("#Screen_1")
 const screen2 = document.querySelector("#Screen_2")
 screen2.setAttribute("style", "display:none;");
 const currentGroup = document.querySelector("#group");
-currentGroup.textContent = `${group}:online users: ${users}`;
 var currentTime = 0;
 const time = document.querySelector("#timer");
 const joinbutton=document.querySelector("#add");
@@ -19,6 +18,7 @@ const sendButton=document.querySelector("#send");
 const join = function () {
     let name = document.querySelector("#username").value;
     group = document.querySelector("#channel").value;
+    currentGroup.textContent = `${group}:online users: ${users}`;
     if (name && group) {
         pusher = new push.PusherHandler(name, group);
         users = pusher.numberUsers;
