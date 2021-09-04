@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat Application</title>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="Screen_1" class="container">
+        <h1>Login Screen</h1>
+        <div class="text-center">
+            <div class="my-2 ">
+                <input type="text" id="channel" class="input-group-sm" placeholder="Type group name" />
+            </div>
+            <div class="my-2">
+                <input type="text" id="username" class="input-group-sm" placeholder="Type your name" />
+            </div>
+            <div class="my-2">
+                <button id="add" type="button" class="btn btn-dark btn-block">Join Group</button>
+            </div>
+        </div>
+
+    </div>
+    <div id="Screen_2" class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 id="group"></h2>
+            </div>
+
+            <div class="col-md-auto">
+                <button id="logout" type="button" class="btn-dark">Logout</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <ul id="chatlist" class="list-group overflow-auto w-75 h-50 text-center"></ul>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                    <textarea id="msg" class="form-control" placeholder="Message" ></textarea>
+            </div>
+            <div class="col-3 ">
+                    <button id="send" type="button" class="btn-dark btn-lg p-3">Send</button>
+                </div>
+        </div>
+        <div class="text-center">
+            <h6 id="timer">You will logout after: (1:00)</h6>
+        </div>
+
+    </div>
+    <script src="pusher" type="module"></script>
+    <script src="script.js" type="module"></script>
+</body>
+
+</html>
