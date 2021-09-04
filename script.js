@@ -44,7 +44,7 @@ const updatechat=function() {
     let elemuser=elemOrigin.split("@")[0];
     let msg=element.split("!")[1];
     let tem=elemOrigin.substring(1);
-    if (tem === origin) chatList.innerHTML += `<li class="list-group-item text-xxl-end">${elemuser}:
+    if (tem === origin) chatList.innerHTML += `<li class="list-group-item text-xxl-end">you:
         ${msg}</li>`;
 
     else {
