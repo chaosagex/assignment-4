@@ -47,6 +47,7 @@ const updatechat = function () {
         let tem = elemOrigin.substring(1);
         msg=msg.replaceAll("\\n",`<br>`)
         msg=msg.replaceAll(`"`,"");
+        elemuser=elemuser.replaceAll(`"`,"");
         if (msg.includes(`#leave#`)) {
             usersSet.delete(elemOrigin);
             users = usersSet.size;
