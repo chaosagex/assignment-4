@@ -27,13 +27,14 @@ const join = function () {
         let screen1 = document.querySelector("#Screen_1")
         screen1.setAttribute("style", "display:none;");
         screen2.setAttribute("style", "");
-        sendMessage();
+        pusher.sendMessage("#enters#");
     }
 }
 
 
 
 const updatechat = function () {
+    pusher.sendMessage("#update#");
     let origin = pusher.userName;
     let usersSet = new Set();
     usersSet.add(origin);
@@ -59,10 +60,13 @@ const updatechat = function () {
             currentGroup.textContent = `${group}:online users: ${users}`;
             return;
         }
-        if (tem === origin) chatList.innerHTML += `<li class="list-group-item text-xxl-end">you:
-        ${msg}</li>`;
+        if (tem === origin){
+            if((!(msg.includes(`#enters#`)||msg.includes(`#update#`))))
+                chatList.innerHTML += `<li class="list-group-item text-xxl-end">you: ${msg}</li>`;
+        } 
 
         else {
+            if(!(msg.includes(`#enters#`)||msg.includes(`#update#`)))
             chatList.innerHTML += `<li class="list-group-item text-xxl-start">${elemuser}:
     ${msg}</li>`;
             usersSet.add(elemOrigin);
