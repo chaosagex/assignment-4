@@ -13,7 +13,7 @@ const joinbutton = document.querySelector("#add");
 const chatList = document.querySelector("#chatlist");
 const logoutButton = document.querySelector("#logout");
 const sendButton = document.querySelector("#send");
-
+const message = document.querySelector("#msg");
 
 const join = function () {
     let name = document.querySelector("#username").value;
@@ -45,18 +45,19 @@ const updatechat = function () {
         let elemuser = elemOrigin.split("@")[0];
         let msg = element.split("!")[1];
         let tem = elemOrigin.substring(1);
+        msg=msg.replaceAll("\\n",`<br>`)
+        msg=msg.replaceAll(`"`,"");
         if (msg.includes(`#leave#`)) {
             usersSet.delete(elemOrigin);
             users = usersSet.size;
             currentGroup.textContent = `${group}:online users: ${users}`;
             return;
         }
-        if (msg.length < 2) {
+        if (msg.length < 1) {
             users = usersSet.size;
             currentGroup.textContent = `${group}:online users: ${users}`;
             return;
         }
-
         if (tem === origin) chatList.innerHTML += `<li class="list-group-item text-xxl-end">you:
         ${msg}</li>`;
 
@@ -109,7 +110,13 @@ joinbutton.addEventListener("click", function () { join(); });
 logoutButton.addEventListener("click", function () { logout(); });
 sendButton.addEventListener("click", function () { sendMessage(); });
 document.addEventListener('keydown', function (event) {
-    if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
-        sendMessage();
+    if((event.keyCode == 10 || event.keyCode == 13) && event.altKey){
+        message.value = message.value.substring(0, this.selectionStart)+"\n";
     }
+    else if ((event.keyCode == 10 || event.keyCode == 13)) {
+        event.preventDefault();
+        sendMessage();
+        event.preventDefault();
+    }
+    
 });
