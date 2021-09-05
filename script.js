@@ -27,6 +27,7 @@ const join = function () {
         let screen1 = document.querySelector("#Screen_1")
         screen1.setAttribute("style", "display:none;");
         screen2.setAttribute("style", "");
+        sendMessage();
     }
 }
 
@@ -44,6 +45,13 @@ const updatechat=function() {
     let elemuser=elemOrigin.split("@")[0];
     let msg=element.split("!")[1];
     let tem=elemOrigin.substring(1);
+    if(msg===`#leave#`)
+        {
+        usersSet.delete(elemOrigin);
+        users=usersSet.size;
+        currentGroup.textContent = `${group}:online users: ${users}`;
+        return;
+        }
     if (tem === origin) chatList.innerHTML += `<li class="list-group-item text-xxl-end">you:
         ${msg}</li>`;
 
@@ -61,6 +69,7 @@ const updatechat=function() {
 const sendMessage=function(){
     let message=document.querySelector("#msg").value;
     pusher.sendMessage(message);
+    document.querySelector("#msg").value="";
     currentTime=60;
 }
 
@@ -71,6 +80,9 @@ let logout = function () {
     timer=null;
     currentTime = 0;
     chatList.innerHTML=`<ul id="chatlist" class="list-group overflow-auto w-75 h-50 text-center"></ul>`
+    push.clearMsgs();
+    pusher.sendMessage("#leave#");
+    pusher.unSubscribe(group);
 }
 let setTimerLabel = function () {
 
@@ -79,7 +91,7 @@ let setTimerLabel = function () {
 let updateTimer = function () {
     currentTime--;
     updatechat()
-    if (currentTime < 0) {
+    if (currentTime < 1) {
         logout();
         clearInterval(timer);
     }
@@ -91,3 +103,8 @@ let updateTimer = function () {
 joinbutton.addEventListener("click",function(){ join(); });
 logoutButton.addEventListener("click",function(){ logout(); });
 sendButton.addEventListener("click",function(){ sendMessage(); });
+document.addEventListener('keydown', function(event) {
+    if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
+      sendMessage();
+    }
+  });

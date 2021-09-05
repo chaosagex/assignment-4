@@ -3,6 +3,9 @@ export var msgs=[];
 let addMsg=function(msg) {
    msgs.push(msg)
 }
+export var clearMsgs=function(){
+    msgs=[];
+}
 export class PusherHandler {
 
     constructor(userName, group) {
@@ -48,9 +51,9 @@ export class PusherHandler {
     }
     unSubscribe(group) {
         this.channel = this.pusher.unsubscribe(group.toLowerCase());
-        this.presence = this.pusher.unsubscribe(`presence-${group.toLowerCase()}`)
+        // this.presence = this.pusher.unsubscribe(`presence-${group.toLowerCase()}`)
         this.channel = null;
-        this.presence = null;
+        // this.presence = null;
     }
     disconnect(group) {
         this.presence = this.pusher.unsubscribe(`presence-${group.toLowerCase()}`)
