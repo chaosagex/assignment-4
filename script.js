@@ -14,11 +14,13 @@ const chatList = document.querySelector("#chatlist");
 const logoutButton = document.querySelector("#logout");
 const sendButton = document.querySelector("#send");
 const message = document.querySelector("#msg");
-
+const updateUserCount=function (users,group){
+    currentGroup.textContent = `${group}:online users: ${users}`;
+}
 const join = function () {
     let name = document.querySelector("#username").value;
     group = document.querySelector("#channel").value;
-    currentGroup.textContent = `${group}:online users: ${users}`;
+    updateUserCount(users,group);
     if (name && group) {
         pusher = new push.PusherHandler(name, group);
         users = pusher.numberUsers;
@@ -52,12 +54,12 @@ const updatechat = function () {
         if (msg.includes(`#leave#`)) {
             usersSet.delete(elemOrigin);
             users = usersSet.size;
-            currentGroup.textContent = `${group}:online users: ${users}`;
+            updateUserCount(users,group);
             return;
         }
         if (msg.length < 1) {
             users = usersSet.size;
-            currentGroup.textContent = `${group}:online users: ${users}`;
+            updateUserCount(users,group);
             return;
         }
         if (tem === origin){
@@ -72,7 +74,7 @@ const updatechat = function () {
             usersSet.add(elemOrigin);
         }
         users = usersSet.size;
-        currentGroup.textContent = `${group}:online users: ${users}`;
+        updateUserCount(users,group);
     });
 
 
@@ -92,6 +94,8 @@ let logout = function () {
     currentTime = 0;
     chatList.innerHTML = `<ul id="chatlist" class="list-group overflow-auto w-75 h-50 text-center"></ul>`
     push.clearMsgs();
+    users=0;
+    updateUserCount(users,group);
     pusher.sendMessage("#leave#");
     pusher.unSubscribe(group);
 }
