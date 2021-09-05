@@ -1,6 +1,6 @@
 import * as push from "./modules/pusher.js";
 var pusher = null;
-var timer=null;
+var timer = null;
 var users = 0;
 var group = "";
 const screen1 = document.querySelector("#Screen_1")
@@ -9,10 +9,10 @@ screen2.setAttribute("style", "display:none;");
 const currentGroup = document.querySelector("#group");
 var currentTime = 0;
 const time = document.querySelector("#timer");
-const joinbutton=document.querySelector("#add");
-const chatList=document.querySelector("#chatlist");
-const logoutButton=document.querySelector("#logout");
-const sendButton=document.querySelector("#send");
+const joinbutton = document.querySelector("#add");
+const chatList = document.querySelector("#chatlist");
+const logoutButton = document.querySelector("#logout");
+const sendButton = document.querySelector("#send");
 
 
 const join = function () {
@@ -23,7 +23,7 @@ const join = function () {
         pusher = new push.PusherHandler(name, group);
         users = pusher.numberUsers;
         currentTime = 60;
-        timer=setInterval(function(){ updateTimer(); }, 1000)
+        timer = setInterval(function () { updateTimer(); }, 1000)
         let screen1 = document.querySelector("#Screen_1")
         screen1.setAttribute("style", "display:none;");
         screen2.setAttribute("style", "");
@@ -33,53 +33,58 @@ const join = function () {
 
 
 
-const updatechat=function() {
-    let origin=pusher.userName;
-    let usersSet=new Set();
+const updatechat = function () {
+    let origin = pusher.userName;
+    let usersSet = new Set();
     usersSet.add(origin);
     let chatList = document.querySelector("#chatlist");
-    chatList.innerHTML=`<ul id="chatlist" class="list-group overflow-auto w-75 h-50 text-center"></ul>`;
+    chatList.innerHTML = `<ul id="chatlist" class="list-group overflow-auto w-75 h-50 text-center"></ul>`;
     let user = origin.split("@")[0];
     push.msgs.forEach(element => {
-    let elemOrigin=element.split("!")[0];
-    let elemuser=elemOrigin.split("@")[0];
-    let msg=element.split("!")[1];
-    let tem=elemOrigin.substring(1);
-    if(msg===`#leave#`)
-        {
-        usersSet.delete(elemOrigin);
-        users=usersSet.size;
-        currentGroup.textContent = `${group}:online users: ${users}`;
-        return;
+        let elemOrigin = element.split("!")[0];
+        let elemuser = elemOrigin.split("@")[0];
+        let msg = element.split("!")[1];
+        let tem = elemOrigin.substring(1);
+        if (msg.includes(`#leave#`)) {
+            usersSet.delete(elemOrigin);
+            users = usersSet.size;
+            currentGroup.textContent = `${group}:online users: ${users}`;
+            return;
         }
-    if (tem === origin) chatList.innerHTML += `<li class="list-group-item text-xxl-end">you:
+        if (msg.length < 2) {
+            users = usersSet.size;
+            currentGroup.textContent = `${group}:online users: ${users}`;
+            return;
+        }
+
+        if (tem === origin) chatList.innerHTML += `<li class="list-group-item text-xxl-end">you:
         ${msg}</li>`;
 
-    else {
-        chatList.innerHTML += `<li class="list-group-item text-xxl-start">${elemuser}:
+        else {
+            chatList.innerHTML += `<li class="list-group-item text-xxl-start">${elemuser}:
     ${msg}</li>`;
-    usersSet.add(elemOrigin);
-    }
-    users=usersSet.size;
-    currentGroup.textContent = `${group}:online users: ${users}`;
+            usersSet.add(elemOrigin);
+        }
+        users = usersSet.size;
+        currentGroup.textContent = `${group}:online users: ${users}`;
     });
-    
+
 
 }
-const sendMessage=function(){
-    let message=document.querySelector("#msg").value;
+const sendMessage = function () {
+    let message = document.querySelector("#msg").value;
     pusher.sendMessage(message);
-    document.querySelector("#msg").value="";
-    currentTime=60;
+    document.querySelector("#msg").value = "";
+    currentTime = 60;
 }
 
 let logout = function () {
     screen2.setAttribute("style", "display:none;");
     screen1.setAttribute("style", "");
     clearInterval(timer);
-    timer=null;
+    timer = null;
     currentTime = 0;
-    chatList.innerHTML=`<ul id="chatlist" class="list-group overflow-auto w-75 h-50 text-center"></ul>`
+    chatList.innerHTML = `<ul id="chatlist" class="list-group overflow-auto w-75 h-50 text-center"></ul>`
     push.clearMsgs();
     pusher.sendMessage("#leave#");
     pusher.unSubscribe(group);
@@ -100,11 +105,11 @@ let updateTimer = function () {
 
     }
 }
-joinbutton.addEventListener("click",function(){ join(); });
-logoutButton.addEventListener("click",function(){ logout(); });
-sendButton.addEventListener("click",function(){ sendMessage(); });
-document.addEventListener('keydown', function(event) {
+joinbutton.addEventListener("click", function () { join(); });
+logoutButton.addEventListener("click", function () { logout(); });
+sendButton.addEventListener("click", function () { sendMessage(); });
+document.addEventListener('keydown', function (event) {
     if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey) {
-      sendMessage();
+        sendMessage();
     }
-  });
+});
